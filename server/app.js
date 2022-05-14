@@ -7,8 +7,8 @@ app.use(express.json());
 
 app.use(morgan("combined"));
 
-const productRouter = require("./routes/product.route");
-app.use("/", productRouter);
+const roomRouter = require("./routes/room.route");
+app.use("/", roomRouter);
 
 const connectDB = require("./config/db.config");
 
