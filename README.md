@@ -91,7 +91,7 @@ Our users should be able to:
 
 ## Iteration #3 | API Authentication
 
-Right now, everyone can create, view, edit or delete everyone else's rooms and reviews. That's because there's no way we can know who's using our app if we don't include some kind of authentication. Using the JWT strategy, Passport and the React Context API, create the Login, Signup and Logout functionalities for our app:
+Right now, everyone can create, view, edit or delete everyone else's rooms and reviews. That's because there's no way we can know who's using our app if we don't include some kind of authentication. Using the JWT strategy and the React Context API, create the Login, Signup and Logout functionalities for our app:
 
 💡 Make sure you install all the packages: _bcrypt_, _jsonwebtoken_ and _dotenv_.
 
