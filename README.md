@@ -93,7 +93,7 @@ Our users should be able to:
 
 Right now, everyone can create, view, edit or delete everyone else's rooms and reviews. That's because there's no way we can know who's using our app if we don't include some kind of authentication. Using the JWT strategy, Passport and the React Context API, create the Login, Signup and Logout functionalities for our app:
 
-💡 Make sure you install all the packages: _bcryptjs_, _jsonwebtoken_ and _dotenv_.
+💡 Make sure you install all the packages: _bcrypt_, _jsonwebtoken_ and _dotenv_.
 
 - Install & configure `dotenv` (if not already installed) and put all your environment dependent strings in a `.env` file (database host address, listen port, token sign secret, etc);
 - Create a Signup endpoint in the backend (don't forget to hash the user's password before writing to the database!);
