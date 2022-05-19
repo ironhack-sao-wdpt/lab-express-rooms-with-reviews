@@ -1,8 +1,8 @@
 const router = require("express").Router();
 const ReviewModel = require("../models/Review.model");
 const RoomModel = require("../models/Room.model");
-
-router.post("/review", async (req, res) => {
+const isAuthenticated = require("../middlewares/isAuthenticated");
+router.post("/review", isAuthenticated, async (req, res) => {
   try {
     const data = req.body;
 
@@ -33,10 +33,10 @@ router.post("/review", async (req, res) => {
   }
 });
 
-router.get("/review", async (req, res) => {
+router.get("/review", isAuthenticated, async (req, res) => {
   try {
-    // const rooms = await ReviewModel.find().populate("roomId");
-    const rooms = await RoomModel.find().populate("reviews");
+    const rooms = await ReviewModel.find().populate("roomId");
+    // const rooms = await RoomModel.find().populate("reviews");
 
     return res.status(200).json(rooms);
   } catch (error) {
@@ -45,7 +45,7 @@ router.get("/review", async (req, res) => {
   }
 });
 
-router.patch("/review/:_id", async (req, res) => {
+router.patch("/review/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
     const data = req.body;
@@ -66,7 +66,7 @@ router.patch("/review/:_id", async (req, res) => {
   }
 });
 
-router.delete("/review/:_id", async (req, res) => {
+router.delete("/review/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
 

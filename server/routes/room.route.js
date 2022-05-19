@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const RoomModel = require("../models/Room.model");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
-router.post("/room", async (req, res) => {
+router.post("/room", isAuthenticated, async (req, res) => {
   try {
     const data = req.body;
     const result = await RoomModel.create(data);
@@ -13,9 +14,9 @@ router.post("/room", async (req, res) => {
   }
 });
 
-router.get("/room", async (req, res) => {
+router.get("/room", isAuthenticated, async (req, res) => {
   try {
-    const rooms = await RoomModel.find();
+    const rooms = await RoomModel.find().populate("reviews");
 
     return res.status(200).json(rooms);
   } catch (error) {
@@ -24,7 +25,7 @@ router.get("/room", async (req, res) => {
   }
 });
 
-router.get("/room/:_id", async (req, res) => {
+router.get("/room/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
     const room = await RoomModel.findOne({ _id });
@@ -40,7 +41,7 @@ router.get("/room/:_id", async (req, res) => {
   }
 });
 
-router.patch("/room/:_id", async (req, res) => {
+router.patch("/room/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
     const data = req.body;
@@ -61,7 +62,7 @@ router.patch("/room/:_id", async (req, res) => {
   }
 });
 
-router.delete("/room/:_id", async (req, res) => {
+router.delete("/room/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
 
