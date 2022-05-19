@@ -1,12 +1,21 @@
 const router = require("express").Router();
 const ReviewsModel = require("../models/Reviews.model");
+const RoomModel = require("../models/Room.model");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
 // Create review
-// a rota do review tem que estar ligada com a rota do room?
-router.post("/review-create", async (req, res) => {
+router.post("/review-create", isAuthenticated, async (req, res) => {
   try {
     const data = req.body;
     const result = await ReviewsModel.create(data);
+
+    const updateResult = await RoomModel.findOneAndUpdate(
+      { _id: data.roomId },
+      { $push: { orders: result._id } },
+      { new: true, runValidators: true }
+    );
+
+    console.log("Room updated: ", updateResult);
 
     return res.status(201).json(result);
   } catch (err) {
@@ -15,26 +24,8 @@ router.post("/review-create", async (req, res) => {
   }
 });
 
-// Read list of reviews
-router.get("/reviews", async (req, res) => {
-  try {
-    let { page, limit } = req.query;
-    page = Number(page);
-    limit = Number(limit);
-
-    const reviwes = await ReviewsModel.find()
-      .skipe(page * limit)
-      .limit(limit);
-
-    return res.status(200).json(reviews);
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ msg: "Review searching faild" });
-  }
-});
-
 // Update review
-router.patch("/reviews/:_id", async (req, res) => {
+router.patch("/reviews/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
     const data = req.body;
@@ -56,7 +47,8 @@ router.patch("/reviews/:_id", async (req, res) => {
 });
 
 // Delete review
-router.delete("/reviews/:_id", async (req, res) => {
+// PRECISA FAZER A ATUALIZAÇAO DA ARRAY DE REVIWES NO ROOM
+router.delete("/reviews/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
     const result = await ReviewsModel.deleteOne({ _id });
