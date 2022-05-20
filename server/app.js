@@ -14,10 +14,12 @@ app.use(morgan("combined"));
 // 5. Configurar as rotas (endpoints) de API
 const roomRouter = require("./routes/room.route");
 const reviewRouter = require("./routes/review.route");
+const userRouter = require("./routes/user.route");
 
 //Redireciona todas as requisições para o roteador configurado no arquivo '.js'
 app.use("/", roomRouter);
 app.use("/", reviewRouter);
+app.use("/", userRouter);
 
 // 4. Conectar com o banco de dados
 const connectToDB = require("./config/db.config");
@@ -28,3 +30,6 @@ connectToDB().then(() => {
 
   app.listen(4000, () => console.log("Servidor rodando na porta ", 4000));
 });
+
+
+

@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const ReviewModel = require("../models/Review.model");
 const RoomModel = require("../models/Room.model");
 
 //Crud(create)
@@ -42,7 +43,7 @@ router.get("/room/:_id", async (req, res) => {
     let { _id } = req.params;
 
     //busca o documento com id
-    const rooms = await RoomModel.findOne({ _id });
+    const rooms = await RoomModel.findOne({ _id }).populate("reviews");
 
     //caso não exista retorna 404
     if (!rooms) {
@@ -89,6 +90,9 @@ router.delete("/room/:_id", async (req, res) => {
     const { _id } = req.params;
 
     const result = await RoomModel.deleteOne({ _id });
+    const reviewResult = await ReviewModel.deleteMany({ roomId: _id });
+
+    console.log(reviewResult);
 
     if (result.deletedCount < 1) {
       return res.status(404).json({ msg: "sala não encontrada" });

@@ -1,10 +1,17 @@
 const router = require("express").Router();
 const ReviewModel = require("../models/Review.model");
+const RoomModel = require("../models/Room.model");
 
 router.post("/review", async (req, res) => {
   try {
     const data = req.body;
     const result = await ReviewModel.create(data);
+    const updateResult = await RoomModel.findOneAndUpdate(
+      { _id: data.roomId },
+      { $push: { reviews: result._id } },
+      { new: true, runValidators: true }
+    );
+
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
