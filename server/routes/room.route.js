@@ -1,9 +1,10 @@
 const router = require("express").Router();
 const ReviewModel = require("../models/Review.model");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 const RoomModel = require("../models/Room.model");
 
 //Crud(create)
-router.post("/room", async (req, res) => {
+router.post("/room", isAuthenticated, async (req, res) => {
   try {
     //1. extrair as informações do corpo da requisição
     const data = req.body;
@@ -20,7 +21,7 @@ router.post("/room", async (req, res) => {
 });
 
 //cRud(read)
-router.get("/room", async (req, res) => {
+router.get("/room", isAuthenticated, async (req, res) => {
   try {
     let { page, limit } = req.query;
     page = Number(page);
@@ -37,7 +38,7 @@ router.get("/room", async (req, res) => {
 });
 
 //cRud(read) - filtrado por id
-router.get("/room/:_id", async (req, res) => {
+router.get("/room/:_id", isAuthenticated, async (req, res) => {
   try {
     //extrai id URL
     let { _id } = req.params;
@@ -58,7 +59,7 @@ router.get("/room/:_id", async (req, res) => {
 });
 
 //crUd(update)
-router.patch("/room/:_id", async (req, res) => {
+router.patch("/room/:_id", isAuthenticated, async (req, res) => {
   try {
     //1. extrair id URL
     const { _id } = req.params;
@@ -84,7 +85,7 @@ router.patch("/room/:_id", async (req, res) => {
 });
 
 //cruD(delete)
-router.delete("/room/:_id", async (req, res) => {
+router.delete("/room/:_id", isAuthenticated, async (req, res) => {
   try {
     //1. extrair id URL
     const { _id } = req.params;

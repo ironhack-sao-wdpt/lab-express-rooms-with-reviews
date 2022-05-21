@@ -1,8 +1,9 @@
 const router = require("express").Router();
 const ReviewModel = require("../models/Review.model");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 const RoomModel = require("../models/Room.model");
 
-router.post("/review", async (req, res) => {
+router.post("/review", isAuthenticated, async (req, res) => {
   try {
     const data = req.body;
     const result = await ReviewModel.create(data);
@@ -19,7 +20,7 @@ router.post("/review", async (req, res) => {
   }
 });
 
-router.get("/review", async (req, res) => {
+router.get("/review", isAuthenticated, async (req, res) => {
   try {
     let { page, limit } = req.query;
     page = Number(page);
@@ -35,7 +36,7 @@ router.get("/review", async (req, res) => {
   }
 });
 
-router.get("/review/:_id", async (req, res) => {
+router.get("/review/:_id", isAuthenticated, async (req, res) => {
   try {
     let { _id } = req.params;
 
@@ -52,7 +53,7 @@ router.get("/review/:_id", async (req, res) => {
   }
 });
 
-router.patch("/review/:_id", async (req, res) => {
+router.patch("/review/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
     const data = req.body;
@@ -74,7 +75,7 @@ router.patch("/review/:_id", async (req, res) => {
   }
 });
 
-router.delete("/review/:_id", async (req, res) => {
+router.delete("/review/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
 
