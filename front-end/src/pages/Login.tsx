@@ -17,9 +17,6 @@ const Login = () => {
     password: "",
   });
 
-  type Custom = {
-    state: object;
-  };
   const navigate = useNavigate();
   const location: any = useLocation();
 
@@ -37,7 +34,9 @@ const Login = () => {
     try {
       const response = await axiosApi.post("/login", state);
 
+      console.log(response.data);
       setLoggedInUser({ ...response.data });
+
       window.localStorage.setItem(
         "loggedInUser",
         JSON.stringify(response.data)

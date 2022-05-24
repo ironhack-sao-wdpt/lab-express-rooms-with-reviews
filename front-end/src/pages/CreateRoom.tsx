@@ -1,24 +1,29 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import axiosApi from "../apis/axiosApi";
 import { Navigate, useNavigate } from "react-router-dom";
+import { height } from "@mui/system";
+import { Typography } from "@mui/material";
+import { AuthContext } from "../context/authContext";
 
-const Singup = () => {
-  type userInterface = {
-    password: string;
-    confirmPassword: string;
-    email: string;
+const CreateRoom = () => {
+  type roomInterface = {
     name: string;
+    description: string;
+    imageUrl: string;
+    createdBy: string;
   };
-  const [state, setState] = useState<userInterface>({
-    password: "",
-    confirmPassword: "",
-    email: "",
+
+  const [state, setState] = useState<roomInterface>({
+    description: "",
+    imageUrl: "",
     name: "",
+    createdBy: "",
   });
 
+  const [loggedInUser] = useContext(AuthContext);
   const navigate = useNavigate();
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -29,15 +34,14 @@ const Singup = () => {
     event.preventDefault();
 
     try {
-      if (state.confirmPassword !== state.password) {
-        throw new Error("Senhas não conferem");
-      }
-
-      const response = await axiosApi.post("/signup", state);
+      const response = await axiosApi.post("/room", {
+        ...state,
+        createdBy: loggedInUser.user._id,
+      });
 
       console.log(response.data);
 
-      navigate("/login");
+      navigate("/myrooms");
     } catch (error) {
       console.error(error);
     }
@@ -57,6 +61,7 @@ const Singup = () => {
       onSubmit={handleSubmit}
       autoComplete="off"
     >
+      <Typography variant="h2">Criar Quarto</Typography>
       <TextField
         required
         name="name"
@@ -66,28 +71,22 @@ const Singup = () => {
       />
       <TextField
         required
-        name="email"
-        label="Email"
-        type="email"
+        name="imageUrl"
+        label="Imagem"
         onChange={handleChange}
-        value={state.email}
+        value={state.imageUrl}
       />
       <TextField
         required
-        name="password"
-        label="Senha"
-        type="password"
+        name="description"
+        label="Descricacao"
+        type="text"
+        multiline
+        rows={4}
         onChange={handleChange}
-        value={state.password}
+        value={state.description}
       />
-      <TextField
-        required
-        name="confirmPassword"
-        label="Confirmar Senha"
-        type="password"
-        onChange={handleChange}
-        value={state.confirmPassword}
-      />
+
       <Button variant="contained" type="submit">
         Cadastrar
       </Button>
@@ -95,4 +94,4 @@ const Singup = () => {
   );
 };
 
-export default Singup;
+export default CreateRoom;

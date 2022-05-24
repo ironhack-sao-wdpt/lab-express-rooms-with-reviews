@@ -5,6 +5,7 @@ const isAuthenticated = require("../middlewares/isAuthenticated");
 router.post("/room", isAuthenticated, async (req, res) => {
   try {
     const data = req.body;
+
     const result = await RoomModel.create(data);
 
     return res.status(201).json(result);

@@ -4,6 +4,7 @@ const roomSchema = new Schema({
   name: { type: String },
   description: { type: String },
   imageUrl: { type: String },
+  createdBy: { type: Schema.Types.ObjectId, ref: "User" },
   reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
 });
 
