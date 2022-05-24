@@ -34,8 +34,7 @@ router.post("/review", async (req, res) => {
   }
 });
 
-//Edit their comments (optional)
-
+//Crud PATCH -> Edit their comments (optional)
 router.patch("/review/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
@@ -56,6 +55,47 @@ router.patch("/review/:_id", async (req, res) => {
     return res
       .status(500)
       .json({ msg: "It was not possible to edit you review" });
+  }
+});
+
+//Crud Delete -> Delete their comments (optional)
+
+//COMO ATUALIZAR  A ARR DE REF nos rooms AQUI DO DELETE??
+
+router.delete("/review/:_id", async (req, res) => {
+  try {
+    const { _id } = req.params;
+
+    const deletedReview = await ReviewModel.deleteOne({ _id });
+
+    if (deletedReview.deletedCount < 1) {
+      return res.status(404).json({ msg: "This review was not found" });
+    }
+    return res.status(200).json({}); //convenção do res é retornar o objeto vazio quando delete deu certo
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ msg: "Fail to delete room" });
+  }
+});
+
+//CRUD - GET -> See the rooms and all the comments
+router.get("/review", async (req, res) => {
+  try {
+    let { page, limit } = req.query;
+
+    page = Number(page);
+    limit = Number(limit);
+
+    const reviewsList = await ReviewModel.find()
+      .skip(page * limit)
+      .limit(limit)
+      .populate("roomId");
+    return res.status(200).json(reviewsList);
+  } catch (err) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ msg: "It was not possible to find rooms and reviews" });
   }
 });
 
