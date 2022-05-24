@@ -46,7 +46,12 @@ const Home = () => {
     >
       {products?.map((element) => {
         console.log(element);
-        return <RoomCards room={element} buttons={["Ver mais"]} />;
+        return (
+          <RoomCards
+            room={element}
+            buttons={[{ text: "Ver mais", link: "/roomdetails/" }]}
+          />
+        );
       })}
     </Container>
   );

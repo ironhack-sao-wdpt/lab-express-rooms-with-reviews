@@ -8,6 +8,8 @@ import ProtectedRoute from "./pages/ProtectedRoute";
 import Home from "./pages/Home";
 import CreateRoom from "./pages/CreateRoom";
 import MyRooms from "./pages/MyRooms";
+import RoomDetails from "./pages/RoomDetails";
+import EditRoom from "./pages/EditRoom";
 
 function App() {
   return (
@@ -23,6 +25,14 @@ function App() {
           <Route
             path="/create"
             element={<ProtectedRoute component={CreateRoom} />}
+          />
+          <Route
+            path="/roomdetails/:roomId"
+            element={<ProtectedRoute component={RoomDetails} />}
+          />
+          <Route
+            path="/editroom/:roomId"
+            element={<ProtectedRoute component={EditRoom} />}
           />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Singup />} />

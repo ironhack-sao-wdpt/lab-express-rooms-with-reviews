@@ -3,6 +3,7 @@ import axiosApi from "../apis/axiosApi";
 import RoomCards from "../components/RoomCards";
 import { AuthContext } from "../context/authContext";
 import Container from "@mui/material/Container";
+import DeleteModal from "../components/DeleteModal";
 
 const MyRooms = () => {
   type roomsInterface = [
@@ -45,8 +46,12 @@ const MyRooms = () => {
       sx={{ marginTop: 2, display: "flex", justifyContent: "space-around" }}
     >
       {products?.map((element) => {
-        console.log(element);
-        return <RoomCards room={element} buttons={["Editar", "Deletar"]} />;
+        return (
+          <RoomCards
+            room={element}
+            buttons={[{ text: "Editar", link: `/editroom/` }]}
+          />
+        );
       })}
     </Container>
   );

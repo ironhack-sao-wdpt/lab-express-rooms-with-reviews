@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const RoomModel = require("../models/Room.model");
+const ReviewModel = require("../models/Review.model");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
 router.post("/room", isAuthenticated, async (req, res) => {
@@ -29,7 +30,7 @@ router.get("/room", isAuthenticated, async (req, res) => {
 router.get("/room/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
-    const room = await RoomModel.findOne({ _id });
+    const room = await RoomModel.findOne({ _id }).populate("reviews");
 
     if (!room) {
       return res.status(404).json({ mgs: "quarto nao encontrado" });
@@ -68,6 +69,7 @@ router.delete("/room/:_id", isAuthenticated, async (req, res) => {
     const { _id } = req.params;
 
     const result = await RoomModel.deleteOne({ _id });
+    const reviewsResult = await ReviewModel.deleteMany({ roomId: _id });
 
     if (result.deletedCount < 1) {
       return res.status(404).json({ msg: "quarto nao encontrado" });
