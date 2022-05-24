@@ -4,14 +4,14 @@ const RoomModel = require("../models/Room.model");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
 // Create review
-router.post("/review-create", isAuthenticated, async (req, res) => {
+router.post("/review-create", async (req, res) => {
   try {
     const data = req.body;
     const result = await ReviewsModel.create(data);
 
     const updateResult = await RoomModel.findOneAndUpdate(
       { _id: data.roomId },
-      { $push: { orders: result._id } },
+      { $push: { reviews: result._id } },
       { new: true, runValidators: true }
     );
 

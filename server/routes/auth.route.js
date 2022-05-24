@@ -4,9 +4,8 @@ const saltRounds = 10;
 
 const User = require("../models/User.model");
 const generateToken = require("../config/jwt.config");
-const isAuthenticated = require("../middlewares/isAuthenticated");
 
-router.post("/singup", async (req, res) => {
+router.post("/signup", async (req, res) => {
   try {
     const { name, email, password } = req.body;
     const salt = bcrypt.genSaltSync(saltRounds);
@@ -17,7 +16,7 @@ router.post("/singup", async (req, res) => {
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ msg: "User singup failed" });
+    return res.status(500).json({ msg: "User signup failed" });
   }
 });
 

@@ -1,10 +1,12 @@
 const express = require("express");
 const morgan = require("morgan");
-const dotenv = require("dotenv").config();
+require("dotenv").config();
+const cors = require("cors");
 
 const app = express();
 
 app.use(express.json());
+app.use(cors({ origin: "http://localhost:3000" }));
 app.use(morgan("combined"));
 
 const roomRouter = require("./routes/rooms.route");

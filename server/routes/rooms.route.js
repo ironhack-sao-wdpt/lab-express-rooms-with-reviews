@@ -1,4 +1,5 @@
 const router = require("express").Router();
+
 const ReviewsModel = require("../models/Reviews.model");
 const RoomModel = require("../models/Room.model");
 const isAuthenticated = require("../middlewares/isAuthenticated");
@@ -9,6 +10,8 @@ router.post("/room-create", isAuthenticated, async (req, res) => {
     const data = req.body;
     const result = await RoomModel.create(data);
 
+    console.log(data);
+
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
@@ -17,14 +20,14 @@ router.post("/room-create", isAuthenticated, async (req, res) => {
 });
 
 // Read (list)
-router.get("/rooms", isAuthenticated, async (req, res) => {
+router.get("/rooms", async (req, res) => {
   try {
     let { page, limit } = req.query;
     page = Number(page);
     limit = Number(limit);
 
     const rooms = await RoomModel.find()
-      .skipe(page * limit)
+      .skip(page * limit)
       .limit(limit);
 
     return res.status(200).json(rooms);
@@ -35,11 +38,11 @@ router.get("/rooms", isAuthenticated, async (req, res) => {
 });
 
 // Read (detail)
-router.get("/rooms/_id", isAuthenticated, async (req, res) => {
+router.get("/rooms/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
 
-    const room = await RoomModel.findOne({ _id }).populate("reviews");
+    const room = await RoomModel.findOne({ _id: _id }).populate("reviews");
 
     if (!room) {
       return res.status(404).json({ msg: "Room not found" });
@@ -52,7 +55,7 @@ router.get("/rooms/_id", isAuthenticated, async (req, res) => {
 });
 
 // Update
-router.patch("/rooms/:_id", async (req, res) => {
+router.patch("/rooms/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
     const data = req.body;
@@ -74,7 +77,7 @@ router.patch("/rooms/:_id", async (req, res) => {
 });
 
 // Delete
-router.delete("/rooms/:_id", async (req, res) => {
+router.delete("/rooms/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
     const result = await RoomModel.deleteOne({ _id });
@@ -86,7 +89,7 @@ router.delete("/rooms/:_id", async (req, res) => {
     }
 
     console.log("Room delete:", result);
-    console.log("Reviews delete: reviewsResult");
+    console.log("Reviews delete:", reviewsResult);
     return res.status(200).json({});
     // PRECISA DELETAR TODOS OS REVIEWS TAMBEM
   } catch (err) {
