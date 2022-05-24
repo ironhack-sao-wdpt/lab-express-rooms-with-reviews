@@ -35,7 +35,9 @@ router.post("/review", isAuthenticated, async (req, res) => {
 
 router.get("/review", isAuthenticated, async (req, res) => {
   try {
-    const rooms = await ReviewModel.find().populate("roomId");
+    const rooms = await ReviewModel.find()
+      .populate("roomId")
+      .populate("createdBy");
     // const rooms = await RoomModel.find().populate("reviews");
 
     return res.status(200).json(rooms);

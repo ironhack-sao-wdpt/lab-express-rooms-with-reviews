@@ -58,7 +58,9 @@ const RoomCards = (props: {
       </CardActionArea>
       <CardActions>
         {buttons.map((element) => (
-          <Link to={`${element.link}${_id}`}>{element.text}</Link>
+          <Link style={{ textDecoration: "none" }} to={`${element.link}${_id}`}>
+            <Button>{element.text}</Button>
+          </Link>
         ))}
 
         {createdBy === loggedInUser.user._id && (

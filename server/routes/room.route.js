@@ -30,7 +30,10 @@ router.get("/room", isAuthenticated, async (req, res) => {
 router.get("/room/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
-    const room = await RoomModel.findOne({ _id }).populate("reviews");
+    const room = await RoomModel.findOne({ _id }).populate({
+      path: "reviews",
+      populate: { path: "createdBy" },
+    });
 
     if (!room) {
       return res.status(404).json({ mgs: "quarto nao encontrado" });
