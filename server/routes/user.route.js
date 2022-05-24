@@ -42,7 +42,7 @@ router.get("/profile/:_id", async (req, res) => {
     // estou olhando o UserModel, portando vou verificar quais os campos que tem esse modelo.
     // no model, procuro o campo que tem a REF! será esse que possui a referência a outra coleção.
     // o parâmetro que vou passar para o populate é o nome do campo do schema (nome da chave do objeto do schema) que contém a referência para a outra coleção - que contém a REF
-    // ato de popular:
+    // ato de popular: (CONTINUAR)
 
     return res.status(201).json(userCreate);
   } catch (err) {

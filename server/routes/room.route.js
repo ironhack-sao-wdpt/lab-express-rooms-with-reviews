@@ -50,7 +50,7 @@ router.patch("/room/:_id", async (req, res) => {
     if (!editedRoom) {
       return res.status(404).json({ msg: "Room not found" });
     }
-    //4. caso contráriuo, vou responder o objeto atualizado
+    //4. caso contrário, vou responder o objeto atualizado
     return res.status(200).json(editedRoom);
   } catch (err) {
     console.error(err);

@@ -67,6 +67,7 @@ router.delete("/review/:_id", async (req, res) => {
     const { _id } = req.params;
 
     const deletedReview = await ReviewModel.deleteOne({ _id });
+    //req room find and update
 
     if (deletedReview.deletedCount < 1) {
       return res.status(404).json({ msg: "This review was not found" });
