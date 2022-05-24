@@ -1,19 +1,30 @@
 const router = require("express").Router();
 const RoomModel = require("../models/Room.model");
+const ReviewModel = require("../models/Review.model");
 
-//POST (create new rooms)
-router.post("/room", async (req, res) => {
+//POST (create reviews for all the rooms but the ones they created*)
+router.post("/review", async (req, res) => {
   try {
     const data = req.body;
-    const result = await RoomModel.create(data);
+    const result = await ReviewModel.create(data);
+
+    // Atualizar usando autenticação*
+    const updateResult = await RoomModel.findOneAndUpdate(
+      { _id: data.roomId },
+      { $push: { reviews: result._id } },
+      { new: true, runValidators: true }
+    );
+
+    console.log("Review atualizado", updateResult);
+
     return res.status(201).json(result);
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ msg: "Falha ao criar o local" });
+    return res.status(500).json({ msg: "Falha ao salvar o review" });
   }
 });
 
-//GET (see the list of the rooms)
+//GET (see the list of the rooms and all the comments)
 router.get("/room", async (req, res) => {
   try {
     let { page, limit } = req.query;
@@ -30,35 +41,35 @@ router.get("/room", async (req, res) => {
   }
 });
 
-//PATCH (edit the room)
-router.patch("/room/:_id", async (req, res) => {
+//PATCH (edit their comments)
+router.patch("/review/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
     const data = req.body;
 
-    const result = await RoomModel.findOneAndUpdate(
+    const result = await ReviewModel.findOneAndUpdate(
       { _id },
       { $set: data },
       { new: true, runValidators: true }
-    ).populate("reviews");
+    );
 
     if (!result) {
-      return res.status(404).json({ msg: "Local não encontrado" });
+      return res.status(404).json({ msg: "Review não encontrado" });
     }
 
     return res.status(200).json(result);
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ msg: "Falha ao editar o local" });
+    return res.status(500).json({ msg: "Falha ao editar o review" });
   }
 });
 
-//DELETE (delete the room)
-router.delete("/room/:_id", async (req, res) => {
+//DELETE (delete their comments)
+router.delete("/review/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
 
-    const result = await RoomModel.deleteOne({ _id }).populate("reviews");
+    const result = await ReviewModel.deleteOne({ _id });
 
     if (result.deletedCount < 1) {
       return res.status(404).json({ msg: "Local não encontrado" });

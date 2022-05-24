@@ -9,6 +9,8 @@ app.use(morgan("combined"));
 
 const roomRouter = require("./routes/room.route");
 app.use("/", roomRouter);
+const reviewRouter = require("./routes/review.route");
+app.use("/", reviewRouter);
 
 const connectDB = require("./config/db.config");
 
