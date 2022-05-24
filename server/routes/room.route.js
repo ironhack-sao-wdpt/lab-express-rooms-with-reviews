@@ -128,7 +128,3 @@ router.get("/room/:_id", async (req, res) => {
 });
 
 module.exports = router;
-
-//create new rooms
-//edit and delete the rooms
-//see the list of the rooms

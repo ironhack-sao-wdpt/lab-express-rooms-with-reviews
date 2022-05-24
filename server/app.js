@@ -13,11 +13,15 @@ app.use(morgan("combined"));
 
 //5. configurar as rotas ou endpoints de API
 const roomRouter = require("./routes/room.route");
+const reviewRouter = require("./routes/review.route");
+const userRouter = require("./routes/user.route");
 
 // use() aceita dois argumentos: 1) uma rota que ele vai escutar e 2) o roteador para o qual ele vai redirecionar as requisições que chegam nessa rota, para esse determinado roteador.
 // usamos o '/' para escutar todas as requisições
 //redireciona todas as requisições para o roteador configurado - no caso - no file rooms.router.js
 app.use("/", roomRouter);
+app.use("/", reviewRouter);
+app.use("/", userRouter);
 
 //4. conectar ao banco de dados
 const connectToDB = require("./config/db.config");
