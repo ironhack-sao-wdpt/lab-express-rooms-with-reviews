@@ -4,7 +4,7 @@ const RoomModel = require("../models/Room.model");
 const isAuthenticated = require("../middlewares/isAuthenticated");
 
 // Create review
-router.post("/review-create", async (req, res) => {
+router.post("/review-create", isAuthenticated, async (req, res) => {
   try {
     const data = req.body;
     const result = await ReviewsModel.create(data);

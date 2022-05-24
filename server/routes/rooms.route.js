@@ -38,7 +38,7 @@ router.get("/rooms", async (req, res) => {
 });
 
 // Read (detail)
-router.get("/rooms/:_id", async (req, res) => {
+router.get("/rooms/:_id", isAuthenticated, async (req, res) => {
   try {
     const { _id } = req.params;
 

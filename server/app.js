@@ -11,9 +11,11 @@ app.use(morgan("combined"));
 
 const roomRouter = require("./routes/rooms.route");
 const reviewsRouter = require("./routes/reviews.route");
+const authRouter = require("./routes/auth.route");
 
 app.use("/", roomRouter);
 app.use("/", reviewsRouter);
+app.use("/", authRouter);
 
 const connectToDB = require("./config/db.config");
 

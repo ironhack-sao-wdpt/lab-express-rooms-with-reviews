@@ -11,7 +11,7 @@ router.post("/signup", async (req, res) => {
     const salt = bcrypt.genSaltSync(saltRounds);
     const hash = bcrypt.hashSync(password, salt);
 
-    const result = await User.create({ name, email, passewordHash: hash });
+    const result = await User.create({ name, email, passwordHash: hash });
 
     return res.status(201).json(result);
   } catch (err) {
@@ -29,7 +29,7 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ msg: "Invalid email or password" });
     }
 
-    if (!bcrypt.compareSync(password, user.passewordHash)) {
+    if (!bcrypt.compareSync(password, user.passwordHash)) {
       return res.status(401).json({ msg: "Invalid email or password" });
     }
 
@@ -41,3 +41,5 @@ router.post("/login", async (req, res) => {
     return res.status(500).json({ msg: "Login failed" });
   }
 });
+
+module.exports = router;

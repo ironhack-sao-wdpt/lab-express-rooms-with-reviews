@@ -19,7 +19,7 @@ function Login() {
 
   const from = location.state?.from?.pathname || "/";
 
-  const [setLoggedInUser] = useContext(AuthContext);
+  const [loggedInUser, setLoggedInUser] = useContext(AuthContext);
 
   function handleChange({ target }) {
     const { name, value } = target;

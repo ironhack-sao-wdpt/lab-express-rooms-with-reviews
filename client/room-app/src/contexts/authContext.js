@@ -11,12 +11,15 @@ function AuthContextComponent(props) {
     const stored = window.localStorage.getItem("loggedInUser") || '""';
 
     const storedUser = JSON.parse(stored);
+    console.log(storedUser);
+    console.log(stored);
 
     if (storedUser.user) {
       setState({ ...storedUser });
     }
   }, []);
 
+  console.log(state);
   useEffect(() => setLoading(false), [state.user]);
 
   return (

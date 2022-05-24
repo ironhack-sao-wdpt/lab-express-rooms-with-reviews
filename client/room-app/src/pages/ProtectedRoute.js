@@ -5,7 +5,8 @@ import { AuthContext } from "../contexts/authContext";
 
 function ProtectedRoute({ component: Component }) {
   const location = useLocation();
-  const [loggedInUser, loading] = useContext(AuthContext);
+  const [loggedInUser, setLoggedInUser, loading] = useContext(AuthContext);
+  console.log("loggedIn", loggedInUser);
 
   if (loading) {
     return <div>Carregando...</div>;
