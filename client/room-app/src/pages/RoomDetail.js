@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
+import { AuthContext } from "../contexts/authContext";
 
 import api from "../apis/api";
 
@@ -13,7 +14,11 @@ function RoomDetail() {
     reviews: [],
   });
 
+  const [loggedInUser, setLoggedInUser] = useContext(AuthContext);
   const { id } = useParams();
+
+  console.log("userId", loggedInUser.user._id);
+  console.log("room", room);
 
   useEffect(() => {
     async function fetchData() {
@@ -33,13 +38,12 @@ function RoomDetail() {
     <div className="container container-fluid d-flex flex-column align-items-center mt-3 px-0">
       <div className="container d-flex justify-content-between p-0 mx-1 px-1">
         <div>
-          {/* DESCOMENTAR DEPOIS QUE CRIAR BOTOES */}
-          {/* <Link className="btn btn-secondary" to={`/edit-post/${id}`}>
-            <Edit />
-          </Link> */}
-          {/* <Link className="btn btn-danger ms-1" to={`/delete-post/${id}`}>
-            <TrashCan />
-          </Link> */}
+          <Link className="btn btn-secondary" to={`/room-update/${id}`}>
+            Edit
+          </Link>
+          <Link className="btn btn-danger ms-1" to={`/room-delete/${id}`}>
+            Delete
+          </Link>
         </div>
       </div>
       <div className="d-flex flex-column flex-sm-column flex-md-column flex-lg-row justify-content-center my-2 px-3 mx-1 border bg-white">

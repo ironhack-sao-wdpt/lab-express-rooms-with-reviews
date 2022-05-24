@@ -52,7 +52,7 @@ function Login() {
 
       <form onSubmit={handleSubmit}>
         <FormControl
-          label="E-mail"
+          label="Email"
           id="loginFormEmail"
           name="email"
           type="email"

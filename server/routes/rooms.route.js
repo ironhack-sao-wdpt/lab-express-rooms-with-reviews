@@ -91,7 +91,6 @@ router.delete("/rooms/:_id", isAuthenticated, async (req, res) => {
     console.log("Room delete:", result);
     console.log("Reviews delete:", reviewsResult);
     return res.status(200).json({});
-    // PRECISA DELETAR TODOS OS REVIEWS TAMBEM
   } catch (err) {
     console.error(err);
     return res.status(500).json({ msg: "Post deletion failed" });
