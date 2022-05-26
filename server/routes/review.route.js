@@ -21,9 +21,9 @@ router.post("/review", async (req, res) => {
       { new: true, runValidators: true }
     );
 
-    //COMO FAZER PARA USER NÃO POSTAR REVIEW DO QUARTO DELE? como montar esse if???
+    //COMO FAZER PARA USER NÃO POSTAR REVIEW DO QUARTO DELE? como montar esse if??? - vou precisar do login e auth
 
-    console.log("Updated Room ->", updateReviewsArrRef);
+    console.log("UPDATED ROOM->", updateReviewsArrRef);
 
     return res.status(201).json(createReview);
   } catch (err) {
@@ -60,14 +60,20 @@ router.patch("/review/:_id", async (req, res) => {
 
 //Crud Delete -> Delete their comments (optional)
 
-//COMO ATUALIZAR  A ARR DE REF nos rooms AQUI DO DELETE??
-
 router.delete("/review/:_id", async (req, res) => {
   try {
     const { _id } = req.params;
+    const data = req.body;
 
     const deletedReview = await ReviewModel.deleteOne({ _id });
-    //req room find and update
+
+    //ATUALIZAR  A ARRAY DE REF no room que continha esta review - NÃO FUNCIONOU DESTA FORMA NEM COM O FINDONEANDUPDATE
+    // não está saindo da array do room
+    //const updateReviewsArrRefFromThisRoom = await RoomModel.deleteMany(
+    //   { _id },
+    //   { $set: data }, // AQUI PRECISA SER O DATA OU POSSO COLOCAR SOMENTE O COMMENT, POR EXEMPLO?
+    //   { new: true, runValidators: true }
+    // );
 
     if (deletedReview.deletedCount < 1) {
       return res.status(404).json({ msg: "This review was not found" });
@@ -75,7 +81,7 @@ router.delete("/review/:_id", async (req, res) => {
     return res.status(200).json({}); //convenção do res é retornar o objeto vazio quando delete deu certo
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ msg: "Fail to delete room" });
+    return res.status(500).json({ msg: "Fail to delete review" });
   }
 });
 

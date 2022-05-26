@@ -3,6 +3,7 @@ const router = require("express").Router();
 
 // importar o room model
 const RoomModel = require("../models/Room.model");
+const ReviewModel = require("../models/Review.model");
 
 // configurar rotas da API
 
@@ -34,7 +35,7 @@ router.patch("/room/:_id", async (req, res) => {
 
     const data = req.body;
 
-    //2. atualizar room com esse id usando os dados do corpot da requisição
+    //2. atualizar room com esse id usando os dados do corpo da requisição
     const editedRoom = await RoomModel.findOneAndUpdate(
       { _id },
       { $set: data },
@@ -66,9 +67,20 @@ router.delete("/room/:_id", async (req, res) => {
 
     const deletedRoom = await RoomModel.deleteOne({ _id });
 
+    //deletando as reviews que eram do room deletado
+    const reviewsFromThisRoomDeleted = await ReviewModel.deleteMany({
+      roomId: _id,
+    });
+
     if (deletedRoom.deletedCount < 1) {
       return res.status(404).json({ msg: "Room not found" });
     }
+
+    console.log("DELETED ROOM:", deletedRoom);
+    console.log(
+      "DELETED REVIEWS FROM DELETED ROOM:",
+      reviewsFromThisRoomDeleted
+    );
     return res.status(200).json({}); //convenção do res é retornar o objeto vazio quando delete deu certo
   } catch (err) {
     console.error(err);
@@ -109,7 +121,7 @@ router.get("/room/:_id", async (req, res) => {
     let { _id } = req.params;
 
     // procuro o room pelo id específico
-    const oneRoom = await RoomModel.findOne({ _id });
+    const oneRoom = await RoomModel.findOne({ _id }).populate("reviews");
     // primeiro _id é o campo do banco de dados que eu quero filtrar
     // segundo _id é o valor que está na minha URL - que puxei pelo req.params
     // funcionalidade da versão 6 do javascript, que não preciso passar o valor quando ele tem o mesmo nome. ntão fica: {_id}
@@ -123,7 +135,7 @@ router.get("/room/:_id", async (req, res) => {
     return res.status(200).json(oneRoom);
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ msg: "Fail to get list of all rooms" });
+    return res.status(500).json({ msg: "Fail to get info of this room" });
   }
 });
 

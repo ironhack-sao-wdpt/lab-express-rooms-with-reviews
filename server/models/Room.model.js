@@ -5,7 +5,7 @@ const RoomSchema = new Schema({
   description: { type: String },
   imageUrl: { type: String },
   reviews: [{ type: Schema.Types.ObjectId, ref: "Review" }],
-  //ref para user
+  // ownerUserId: { type: Schema.Types.ObjectId, ref: "User" },
 });
 
 module.exports = model("Room", RoomSchema);
