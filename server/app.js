@@ -1,3 +1,6 @@
+//importar o dotenv - carrega as variáveis de ambiente presentes no arquivo .env
+require("dotenv").config();
+
 //1. configurar o servidor do express -> vou importar o pacote Express e o morgan do log
 const express = require("express");
 const morgan = require("morgan");

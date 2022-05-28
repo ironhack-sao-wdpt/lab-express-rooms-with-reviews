@@ -3,8 +3,9 @@ const router = require("express").Router();
 const UserModel = require("../models/User.model");
 const RoomModel = require("../models/Room.model");
 const bcrypt = require("bcrypt");
-
 const saltRounds = 10;
+const generateToken = require("../config/jwt.config");
+const isAuthenticated = require("../middlewares/isAuthenticated");
 
 // crud - post -> creat a new user
 router.post("/signup", async (req, res) => {
@@ -33,11 +34,43 @@ router.post("/signup", async (req, res) => {
     console.error(err);
     return res
       .status(500)
-      .json({ msg: "It was not possible to create new user" });
+      .json({ msg: "It was not possible to create a new user" });
   }
 });
 
 // USER LOGIN
+router.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    // 1. Verificar se o usuário já se cadastrou na nossa plataforma - filtrar se o email do usuário se encontra em nosso BD
+    const user = await UserModel.findOne({ email });
+
+    if (!user) {
+      // 401: Unauthorized
+      return res.status(401).json({ msg: "Incorrect email or password" });
+    }
+
+    // 2. Verificar se as senhas coincidem
+    //bcrypt.compareSync() recebe dois argumentos: senha em texto claro e senha criptografada. retornar true (se as senhas batem) ou false (se as senhas não batem)
+    //password que está no req.body e user.passwordHash do meu userModel. no momento que enviei o findOne(), o user já é o modelo de usuário (userModel) inteiro
+    if (!bcrypt.compareSync(password, user.passwordHash)) {
+      // 401: Unauthorized
+      // Por questões de segurança não informamos ao usuário se ele errou a senha ou o email para não ceder a informação de que o e-mail está correto para um potencial usuário malicioso que está tentando invadir uma conta
+      return res.status(401).json({ msg: "Incorrect email or password" });
+    }
+
+    // 3. Assinar o token e enviá-lo como sucesso do login
+    const token = generateToken(user);
+    //respondo o sucesso do login:
+    return res.status(200).json({
+      token,
+      user: { _id: user._id, name: user.name, email: user.email },
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ msg: "Login not possible" });
+  }
+});
 
 // crud - get -> list of all users
 router.get("/user", async (req, res) => {
@@ -56,9 +89,9 @@ router.get("/user", async (req, res) => {
 });
 
 // crud - get -> list of a specific user
-router.get("/profile/:_id", async (req, res) => {
+router.get("/profile", isAuthenticated, async (req, res) => {
   try {
-    const { _id } = req.params;
+    const { _id } = req.user; //pois foi modificado no isAuth. eu sei pelo token o id e infos do usuário
 
     const specificUser = await UserModel.findOne({ _id }).populate(
       "createdRooms"
